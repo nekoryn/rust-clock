@@ -1,5 +1,5 @@
 use chrono::{Local, Timelike};
-use crossterm::terminal::{self, enable_raw_mode, disable_raw_mode, Clear, ClearType};
+use crossterm::terminal::{self, enable_raw_mode, disable_raw_mode, Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen};
 use crossterm::event::{self, Event, KeyCode};
 use crossterm::cursor::{Hide, Show,MoveTo};
 use crossterm::ExecutableCommand;
@@ -147,11 +147,13 @@ fn clock() {
 
 fn main() {
     enable_raw_mode().unwrap();
+    stdout().execute(EnterAlternateScreen).unwrap();
     stdout().execute(Hide).unwrap();
 
     clock();
 
     disable_raw_mode().unwrap();
+    stdout().execute(LeaveAlternateScreen).unwrap();
     stdout().execute(Show).unwrap();
     stdout().execute(Clear(ClearType::All)).unwrap();
 }
