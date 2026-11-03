@@ -4,7 +4,7 @@ use crossterm::event::{self, Event, KeyCode};
 use crossterm::cursor::{Hide, Show,MoveTo};
 use crossterm::ExecutableCommand;
 use std::io::{stdout, Write};
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 const DIGITS: [[&str; 5]; 10] = [
     [
@@ -81,13 +81,16 @@ const DIGITS: [[&str; 5]; 10] = [
 
 
 fn clock() {
-    let mut last_update = Instant::now();
+    let mut last_second = Local::now().second();
+
     loop {
-        if last_update.elapsed() >= Duration::from_secs(1) {
-            last_update = Instant::now();
+        let now = Local::now();
+
+        if now.second() != last_second{
+            last_second = now.second();
 
             print!("\x1B[2J\x1B[H");
-            let now = Local::now();
+            
     
             let terminal_size = terminal::size().unwrap();
             let terminal_width = terminal_size.0 as usize;
